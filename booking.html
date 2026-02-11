@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Book Your Stay | Grand Hotel</title>
+
+    <!-- Mobile responsiveness -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Styles & Script -->
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/script.js" defer></script>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>Grand Hotel</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="rooms.html">Rooms</a>
+            <a href="booking.html">Book Now</a>
+        </nav>
+    </header>
+
+    <!-- Booking Section -->
+    <div class="booking-container">
+        <h2>Hotel Room Booking</h2>
+        <p class="subtitle">Reserve your stay in just a few simple steps</p>
+
+        <form id="bookingForm" class="booking-form">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="john@example.com" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" placeholder="+91 98765 43210" required>
+                </div>
+                <div class="form-group">
+                    <label for="guests">Guests</label>
+                    <input type="number" id="guests" min="1" max="4" value="1" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="checkin">Check-in Date</label>
+                    <input type="date" id="checkin" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="checkout">Check-out Date</label>
+                    <input type="date" id="checkout" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="room">Room Type</label>
+                <select id="room" required>
+                    <option value="">Select a room</option>
+                    <option value="Deluxe Room">Deluxe Room</option>
+                    <option value="Premium Room">Premium Room</option>
+                    <option value="Suite Room">Suite Room</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="requests">Special Requests (Optional)</label>
+                <textarea id="requests" rows="3" placeholder="Late check-in, extra pillows, etc."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-full">Confirm Booking</button>
+        </form>
+
+        <p id="message" class="success-message"></p>
+    </div>
+
+    <!-- Payment Modal (Split Layout) -->
+    <div id="paymentModal" class="popup-overlay">
+        <div class="popup-content payment-cards-container">
+            <!-- Left Sidebar: Summary -->
+            <div class="payment-sidebar">
+                <div class="sidebar-header">
+                    <h4>Payment Details</h4>
+                </div>
+                <div class="sidebar-content">
+                    <p class="pay-label">Total to Pay</p>
+                    <h2 id="payment-amount">₹0</h2>
+                    <div class="order-badge">
+                        <span>Order ID:</span> <span id="order-id"></span>
+                    </div>
+                </div>
+                <div class="sidebar-footer">
+                    <p>Secure SSL Encrypted</p>
+                </div>
+            </div>
+
+            <!-- Right Main: Methods -->
+            <div class="payment-main">
+                <div class="main-header">
+                    <h3>Select Method</h3>
+                    <button id="closePayment" class="close-icon-dark">&times;</button>
+                </div>
+
+                <div class="payment-methods section-padding">
+                    <div class="tabs modern-tabs">
+                        <button class="tab active" data-target="qr">UPI / QR</button>
+                        <button class="tab" data-target="card">Card</button>
+                    </div>
+
+                    <div id="qr" class="tab-content active">
+                        <div class="qr-wrapper">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=GrandHotelPayment"
+                                alt="QR">
+                            <p>Scan with any UPI App</p>
+                            <div class="upi-row">
+                                <span class="badge-pill">GPay</span>
+                                <span class="badge-pill">PhonePe</span>
+                                <span class="badge-pill">Paytm</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="card" class="tab-content">
+                        <form class="card-form-modern">
+                            <label>Card Number</label>
+                            <div class="input-group">
+                                <svg class="input-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                    <line x1="1" y1="10" x2="23" y2="10"></line>
+                                </svg>
+                                <input type="text" placeholder="0000 0000 0000 0000" class="modern-input">
+                            </div>
+                            <div class="row-half">
+                                <div>
+                                    <label>Expiry</label>
+                                    <input type="text" placeholder="MM/YY" class="modern-input">
+                                </div>
+                                <div>
+                                    <label>CVC</label>
+                                    <input type="text" placeholder="123" class="modern-input">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <button id="confirmPayment" class="btn-pay-modern">Pay Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Confirmation Popup (Ticket Style) -->
+    <div id="bookingPopup" class="popup-overlay">
+        <div class="popup-content ticket-card">
+            <div class="ticket-header">
+                <div class="success-ring-anim">
+                    <svg class="checkmark-modern" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                        <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+                        <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                    </svg>
+                </div>
+                <h3 style="color: white;">Booking Confirmed!</h3>
+                <p>We've sent an email to <span id="popup-email-placeholder">you</span></p>
+            </div>
+
+            <div class="ticket-body">
+                <div class="ticket-row">
+                    <div class="ticket-col">
+                        <label>Guest</label>
+                        <span id="popup-name"></span>
+                    </div>
+                    <div class="ticket-col">
+                        <label>Room Type</label>
+                        <span id="popup-room"></span>
+                    </div>
+                </div>
+                <div class="ticket-row">
+                    <div class="ticket-col">
+                        <label>Check-in</label>
+                        <span id="popup-dates"></span>
+                    </div>
+                    <div class="ticket-col right">
+                        <label>Transaction ID</label>
+                        <span id="popup-txid" class="code-font"></span>
+                    </div>
+                </div>
+
+                <div class="ticket-divider"></div>
+
+                <div class="ticket-total">
+                    <span>Total Paid</span>
+                    <span id="popup-price" class="total-anim"></span>
+                </div>
+            </div>
+
+            <button id="closePopup" class="btn-ticket-action">Download Receipt</button>
+        </div>
+    </div>
+
+</body>
